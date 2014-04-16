@@ -18,7 +18,7 @@ class Catalogos extends CI_Controller {
 	{
 		/* */
 		$data['page_title'] = 'Your title';
-		$this->load->view('catalogos/index.php');
+		$this->load->view('shared/_layout', $data);
 	}
 	public function areas(){
 		try{
