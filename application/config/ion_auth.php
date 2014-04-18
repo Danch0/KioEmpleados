@@ -42,8 +42,8 @@ $config['tables']['login_attempts']  = 'KIO_T05_LOGIN_ATTEMPTS';
  | Joins from users.id
  | Joins from groups.id
  */
-$config['join']['users']  = 'T03_E_ID';
-$config['join']['groups'] = 'T02_E_ID';
+$config['join']['users']  = 'user_id';
+$config['join']['groups'] = 'group_id';
 
 /*
  | -------------------------------------------------------------------------
@@ -81,11 +81,11 @@ $config['max_rounds']     = 9;
  | The controller should check this function and act
  | appropriately. If this variable set to 0, there is no maximum.
  */
-$config['site_title']                 = "EmployesKiotech.com";       // Site Title, example.com
-$config['admin_email']                = "sendmails@gmail.com"; // Admin Email, admin@example.com
+$config['site_title']                 = "Example.com";       // Site Title, example.com
+$config['admin_email']                = "admin@example.com"; // Admin Email, admin@example.com
 $config['default_group']              = 'members';           // Default group, use name
 $config['admin_group']                = 'admin';             // Default administrators group, use name
-$config['identity']                   = 'T03_T_EMAIL';             // A database column which is used to login with
+$config['identity']                   = 'email';             // A database column which is used to login with
 $config['min_password_length']        = 8;                   // Minimum Required Length of Password
 $config['max_password_length']        = 20;                  // Maximum Allowed Length of Password
 $config['email_activation']           = FALSE;               // Email Activation for registration
@@ -150,14 +150,14 @@ $config['email_forgot_password_complete'] = 'new_password.tpl.php';
  | -------------------------------------------------------------------------
  | Salt options
  | -------------------------------------------------------------------------
- | salt_length Default: 10
+ | salt_length Default: 22
  |
  | store_salt: Should the salt be stored in the database?
  | This will change your password encryption algorithm,
  | default password, 'password', changes to
  | fbaa5e216d163a02ae630ab1a43372635dd374c0 with default salt.
  */
-$config['salt_length'] = 10;
+$config['salt_length'] = 22;
 $config['store_salt']  = FALSE;
 
 /*
