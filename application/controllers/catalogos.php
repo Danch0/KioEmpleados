@@ -17,7 +17,8 @@ class Catalogos extends CI_Controller {
 	function index()
 	{
 		/* */
-		$data['page_title'] = 'Your title';
+		$data['page_title'] = 'Catalogos';
+		$data['page_name'] = 'catalogos/index';
 		$this->load->view('shared/_layout', $data);
 	}
 	public function areas(){
@@ -52,10 +53,11 @@ class Catalogos extends CI_Controller {
 					
 			/* Generamos la tabla */
 			$output = $crud->render();
-		
+			$output['page_title'] = 'Catalogos:Areas';
+			$output['page_name'] = 'catalogos/v_admin_areas';
 			/* La cargamos en la vista situada en
 			/applications/views/productos/administracion.php */
-			$this->load->view('catalogos/v_admin_areas', $output);
+			$this->load->view('shared/_layout', $output);
 		
 		}catch(Exception $e){
 		  /* Si algo sale mal cachamos el error y lo mostramos */
