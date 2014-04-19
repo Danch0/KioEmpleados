@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8" />
-	<title>Administracion Empleados</title>
+
 	<?php
+	$output2 = $output->output;
+$css_files = $output->css_files;
+$js_files = $output->js_files;
 	foreach($css_files as $file): ?>
 	<link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
 	<?php endforeach; ?>
@@ -15,11 +14,8 @@
 		a { color: blue; text-decoration: none; font-size: 14px; }
 		a:hover { text-decoration: underline; }
 	</style>
-</head>
-<body>
-	<h1>Administración de Empleados</h1>
+
+	<h1>Administración de <?php echo $page_title; ?></h1>
 	<div>
-		<?php echo $output; ?>
+		<?php echo $output2; ?>
 	</div>
-</body>
-</html>

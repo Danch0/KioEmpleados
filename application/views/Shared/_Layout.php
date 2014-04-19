@@ -269,7 +269,7 @@
 								<img class="nav-user-photo" src="<?php echo base_url(); ?>assets/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
 									<small>Welcome,</small>
-									Jason
+									<?php echo $user['nombre']; ?>
 								</span>
 
 								<i class="icon-caret-down"></i>
@@ -349,17 +349,11 @@
 
 					<ul class="nav nav-list">
 						<li class="active">
-							<a href="index.html">
-								<i class="icon-dashboard"></i>
-								<span class="menu-text"> Dashboard </span>
-							</a>
+							<?php echo anchor('catalogos/', '<i class="icon-dashboard"></i> Catalogos', 'title="Catalogos"'); ?>
 						</li>
 
 						<li>
-							<a href="typography.html">
-								<i class="icon-text-width"></i>
-								<span class="menu-text"> Typography </span>
-							</a>
+							<?php echo anchor('empleados/', '<i class="icon-text-width"></i> Empleados', 'title="Empleados"'); ?>
 						</li>
 
 						<li>
@@ -693,23 +687,6 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-
-								<div class="alert alert-block alert-success">
-									<button type="button" class="close" data-dismiss="alert">
-										<i class="icon-remove"></i>
-									</button>
-
-									<i class="icon-ok green"></i>
-
-									Welcome to
-									<strong class="green">
-										Ace
-										<small>(v1.2)</small>
-									</strong>
-									,
-	the lightweight, feature-rich and easy to use admin template.
-								</div>
-
 								<div class="row">
 									<?php $this->load->view($page_name); ?>
 									

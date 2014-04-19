@@ -10,6 +10,8 @@ class Catalogos extends CI_Controller {
 
 		/* Cargamos la libreria*/
 		$this->load->library('grocery_crud');
+		$this->load->library('ion_auth');
+		$this->load->library('form_validation');
 
 		/* Añadimos el helper al controlador */
 		/* $this->load->helper('url'); */
@@ -19,6 +21,11 @@ class Catalogos extends CI_Controller {
 		/* */
 		$data['page_title'] = 'Catalogos';
 		$data['page_name'] = 'catalogos/index';
+
+		$user = $this->ion_auth->user()->row();
+		$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+
+
 		$this->load->view('shared/_layout', $data);
 	}
 	public function areas(){
@@ -53,11 +60,16 @@ class Catalogos extends CI_Controller {
 					
 			/* Generamos la tabla */
 			$output = $crud->render();
-			$output['page_title'] = 'Catalogos:Areas';
-			$output['page_name'] = 'catalogos/v_admin_areas';
+			$data['output'] = $output;
+			$data['page_title'] = 'Areas';
+			$data['page_name'] = 'catalogos/v_admin_catalogos';
+
+			$user = $this->ion_auth->user()->row();
+			$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+
 			/* La cargamos en la vista situada en
 			/applications/views/productos/administracion.php */
-			$this->load->view('shared/_layout', $output);
+			$this->load->view('shared/_layout', $data);
 		
 		}catch(Exception $e){
 		  /* Si algo sale mal cachamos el error y lo mostramos */
@@ -98,9 +110,16 @@ class Catalogos extends CI_Controller {
 			/* Generamos la tabla */
 			$output = $crud->render();
 		
+			$data['output'] = $output;
+			$data['page_title'] = 'Roles';
+			$data['page_name'] = 'catalogos/v_admin_catalogos';
+
+			$user = $this->ion_auth->user()->row();
+			$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+
 			/* La cargamos en la vista situada en
 			/applications/views/productos/administracion.php */
-			$this->load->view('catalogos/v_admin_roles', $output);
+			$this->load->view('shared/_layout', $data);
 		
 		}catch(Exception $e){
 		  /* Si algo sale mal cachamos el error y lo mostramos */
@@ -171,9 +190,16 @@ class Catalogos extends CI_Controller {
 			/* Generamos la tabla */
 			$output = $crud->render();
 		
+			$data['output'] = $output;
+			$data['page_title'] = 'Proyectos';
+			$data['page_name'] = 'catalogos/v_admin_catalogos';
+
+			$user = $this->ion_auth->user()->row();
+			$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+
 			/* La cargamos en la vista situada en
 			/applications/views/productos/administracion.php */
-			$this->load->view('catalogos/v_admin_proyectos', $output);
+			$this->load->view('shared/_layout', $data);
 		
 		}catch(Exception $e){
 		  /* Si algo sale mal cachamos el error y lo mostramos */
