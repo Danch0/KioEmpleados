@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>Dashboard - Ace Admin</title>
+		<title><?php echo $page_title; ?></title>
 
 		<meta name="description" content="overview &amp; stats" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -48,7 +48,7 @@
 					<a href="#" class="navbar-brand">
 						<small>
 							<i class="icon-leaf"></i>
-							Ace Admin
+							Kio Admin
 						</small>
 					</a><!-- /.brand -->
 				</div><!-- /.navbar-header -->
@@ -269,7 +269,7 @@
 								<img class="nav-user-photo" src="<?php echo base_url(); ?>assets/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
 									<small>Welcome,</small>
-									Jason
+									<?php echo $user['nombre']; ?>
 								</span>
 
 								<i class="icon-caret-down"></i>
@@ -293,10 +293,7 @@
 								<li class="divider"></li>
 
 								<li>
-									<a href="#">
-										<i class="icon-off"></i>
-										Logout
-									</a>
+									<?php echo anchor('auth/logout', '<i class="icon-off"></i> Logout', 'title="Logout"'); ?>
 								</li>
 							</ul>
 						</li>
@@ -352,17 +349,11 @@
 
 					<ul class="nav nav-list">
 						<li class="active">
-							<a href="index.html">
-								<i class="icon-dashboard"></i>
-								<span class="menu-text"> Dashboard </span>
-							</a>
+							<?php echo anchor('catalogos/', '<i class="icon-dashboard"></i> Catalogos', 'title="Catalogos"'); ?>
 						</li>
 
 						<li>
-							<a href="typography.html">
-								<i class="icon-text-width"></i>
-								<span class="menu-text"> Typography </span>
-							</a>
+							<?php echo anchor('empleados/', '<i class="icon-text-width"></i> Empleados', 'title="Empleados"'); ?>
 						</li>
 
 						<li>
@@ -696,25 +687,9 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-
-								<div class="alert alert-block alert-success">
-									<button type="button" class="close" data-dismiss="alert">
-										<i class="icon-remove"></i>
-									</button>
-
-									<i class="icon-ok green"></i>
-
-									Welcome to
-									<strong class="green">
-										Ace
-										<small>(v1.2)</small>
-									</strong>
-									,
-	the lightweight, feature-rich and easy to use admin template.
-								</div>
-
 								<div class="row">
-									Contenido de la pagina!
+									<?php $this->load->view($page_name); ?>
+									
 								</div><!-- /row -->
 
 								<!-- PAGE CONTENT ENDS -->

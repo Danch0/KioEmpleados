@@ -87,15 +87,17 @@ class Empleados extends CI_Controller {
 			
 			/* Generamos la tabla */
 			$output = $crud->render();
-			//$data['output'] = $crud->render();
-			//$data['catalogo'] = 'Empleados';
 			
-			
-			//$output['catalogo'] = 'Empleados';
-		
+			$data['output'] = $output;
+			$data['page_title'] = 'Empleados';
+			$data['page_name'] = 'empleados/v_admin_empleados';
+
+			$user = $this->ion_auth->user()->row();
+			$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+
 			/* La cargamos en la vista situada en
 			/applications/views/productos/administracion.php */
-			$this->load->view('empleados/v_admin_empleados', $output);
+			$this->load->view('shared/_layout', $data);
 		
 		}catch(Exception $e){
 		  /* Si algo sale mal cachamos el error y lo mostramos */

@@ -4,6 +4,9 @@
 	<meta charset="utf-8" />
 	<title>Administracion Areas</title>
 	<?php
+	$output2 = $output->output;
+	$css_files = $output->css_files;
+	$js_files = $output->js_files;
 	foreach($css_files as $file): ?>
 	<link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
 	<?php endforeach; ?>
@@ -19,7 +22,7 @@
 <body>
 	<h1>Administración de Areas</h1>
 	<div>
-		<?php echo $output; ?>
+		<?php echo $output2; ?>
 	</div>
 </body>
 </html>
