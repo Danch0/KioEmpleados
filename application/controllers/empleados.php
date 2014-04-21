@@ -10,6 +10,8 @@ class Empleados extends CI_Controller {
 
 		/* Cargamos la libreria*/
 		$this->load->library('grocery_crud');
+		$this->load->library('ion_auth');
+		$this->load->library('form_validation');
 		
 		/* Cargamos el modelo*/
 		$this->load->model('m_empleados');
@@ -21,9 +23,16 @@ class Empleados extends CI_Controller {
 	function index()
 	{
 		/* */
-		redirect('empleados/admin_empleados');
+		$data['page_title'] = 'Empleados';
+		$data['page_name'] = 'empleados/index';
+
+		$user = $this->ion_auth->user()->row();
+		$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+
+
+		$this->load->view('shared/_layout', $data);
 	}
-	
+	// Funcion para dar de alta a empleados con grocery crud
 	public function admin_empleados(){
 		try{
 
@@ -104,6 +113,89 @@ class Empleados extends CI_Controller {
 		  show_error($e->getMessage().' --- '.$e->getTraceAsString());
 		}
 	}
+
+	public function compensacione()
+	{
+		try{
+			/* Creamos el objeto */
+			$crud = new grocery_CRUD();
+			
+			/* Seleccionamos el tema */
+			$crud->set_theme('flexigrid');
+			
+			/* Seleccionmos el nombre de la tabla de nuestra base de datos*/
+			$crud->set_table('KIO_T09_CTRL_COMPENSACIONES');
+			
+			/* Le asignamos un nombre */
+			$crud->set_subject('Compensaciones');
+			
+			/* Asignamos el idioma español */
+			$crud->set_language('spanish');
+			
+			/*Creamos la relacion del campo usuario que hizo el registro */
+			$crud->set_relation('KIO_T01_E_EMPLEADOS','KIO_T01_EMPLEADOS','T01_T_NOMBRE');
+
+			/*Creamos la relacion del campo usuario que hizo el registro */
+			$crud->set_relation('KIO_T03_E_USUARIOS','KIO_T03_USUARIOS','first_name');
+					
+			/* Aqui le indicamos que campos deseamos mostrar CUANDO DAMOS DE ALTA A UN NUEVO EMPLEADO*/
+			$crud->fields(
+			'KIO_T01_E_EMPLEADOS',
+			'KIO_T03_E_USUARIOS',
+			'T09_T_CONCEPTO',
+			'T09_FL_MONTO',
+			'T09_FH_REGISTRO'
+			);
+			/* hacemos invisibles  las filas de usuario registro, por que se toma el id del usuario y hora-fecha al guardar */
+			$crud->change_field_type('KIO_T03_E_USUARIOS', 'invisible');
+			$crud->change_field_type('T09_FH_REGISTRO', 'invisible');
+			
+			/* Aqui le decimos a grocery que estos campos son obligatorios */
+			$crud->required_fields(
+			'KIO_T01_E_EMPLEADOS',
+			'T09_T_CONCEPTO',
+			'T09_FL_MONTO'
+			);
+			
+			/* Aqui le indicamos que campos deseamos mostrar EN LA TABLA*/
+			$crud->columns(
+			'KIO_T01_E_EMPLEADOS',
+			'KIO_T03_E_USUARIOS',
+			'T09_T_CONCEPTO',
+			'T09_FL_MONTO',
+			'T09_FH_REGISTRO'
+			);
+			
+			/* Cambiamos el nombre de la field o column al que queremos mostrar*/
+			$crud->display_as('KIO_T01_E_EMPLEADOS','Empleado');
+			$crud->display_as('KIO_T03_E_USUARIOS','Usuario');
+			$crud->display_as('T09_T_CONCEPTO','Conceto');
+			$crud->display_as('T09_FL_MONTO','Monto');
+			$crud->display_as('T09_FH_REGISTRO','Registro');
+			
+			/* Mandamos el id de quien agrego el proyecto y l fecha en lo que lo hiso, con una funcion del mismo Controller */
+			$crud->callback_before_insert(array($this,'_agregar_IdUsuario_Fecha'));
+
+			/* Generamos la tabla */
+			$output = $crud->render();
+			
+			$data['output'] = $output;
+			$data['page_title'] = 'Empleados';
+			$data['page_name'] = 'empleados/v_admin_empleados';
+			
+			$user = $this->ion_auth->user()->row();
+			$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+			
+			/* La cargamos en la vista situada en
+			/applications/views/productos/administracion.php */
+			$this->load->view('shared/_layout', $data);
+			
+		}catch(Exception $e){
+		/* Si algo sale mal cachamos el error y lo mostramos */
+		show_error($e->getMessage().' --- '.$e->getTraceAsString());
+		}
+	}
+
 	function get_empleado_Jefe()
 	{
 		$empleadosJefe = $this->m_empleados->empleadoJefe();
@@ -118,6 +210,14 @@ class Empleados extends CI_Controller {
 		else {
 			return '<input type="text" maxlength="50" value="No hay jefes de proyecto aun" name="E_ID_RESPONSABLE" style="width:462px" OnFocus="this.blur()">';
 		}
+	}
+
+	function _agregar_IdUsuario_Fecha($post_array) {
+		$user = $this->ion_auth->user()->row();
+		$post_array['T09_FH_REGISTRO'] = date('y-m-d H:s:m');
+		$post_array['KIO_T03_E_USUARIOS'] = $user->id;
+	 
+		return $post_array;
 	}
 }
 	/* End of file empleados.php */
