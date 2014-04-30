@@ -7,7 +7,7 @@
 		<meta name="description" content="overview &amp; stats" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<?php
-			$rutas = array('assets/css/bootstrap.min.css', 'assets/css/font-awesome.min.css', 'assets/css/ace-fonts.css', 'assets/css/ace.min.css', 'assets/css/ace-rtl.min.css', 'assets/css/ace-skins.min.css');
+			$rutas = array('assets/css/bootstrap.min.css');
 			
 			foreach ($rutas as $ruta) {
 				echo "<link href='".base_url().$ruta."' rel='stylesheet' />";
@@ -91,16 +91,6 @@
 
 				<div class="main-content">
 					<div class="page-content">
-						<div class="page-header">
-							<h1>
-								Dashboard
-								<small>
-									<i class="icon-double-angle-right"></i>
-									overview &amp; stats
-								</small>
-							</h1>
-						</div><!-- /.page-header -->
-
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
