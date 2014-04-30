@@ -32,8 +32,8 @@
 				</div><!-- /.navbar-header -->
 
 				<div class="navbar-header pull-right" role="navigation">
-					<ul class="nav ace-nav">
-						<li class="light-blue">
+					<ul class="nav nav-tabs">
+						<li>
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 								<img class="nav-user-photo" src="<?php echo base_url(); ?>assets/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
@@ -43,7 +43,7 @@
 
 								<i class="icon-caret-down"></i>
 							</a>
-
+						</li>
 							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
 									<a href="#">
