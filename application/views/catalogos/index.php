@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8" />
-	<title>Administracion de Catalogos</title>
-	
-</head>
-<body>
 	<h1>Administración de Catalogos</h1>
 	<div>
 		<ol>
@@ -14,5 +6,3 @@
 			<li><?php echo anchor('catalogos/proyectos', 'Proyectos', 'title="Proyectos"'); ?></li>
 		</ol>
 	</div>
-</body>
-</html>

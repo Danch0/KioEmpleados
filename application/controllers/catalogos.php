@@ -144,6 +144,9 @@ class Catalogos extends CI_Controller {
 		
 			/* Asignamos el idioma español */
 			$crud->set_language('spanish');
+
+			/*Creamos la relacion del campo usuario que hizo el registro */
+			$crud->set_relation('KIO_T03_E_USUARIOS','KIO_T03_USUARIOS','first_name');
 			
 			/* Cargamos los empleados que estan asignados al proyecto */
 			$crud->set_relation_n_n('empleados', 'KIO_T17_REL_EMPLEADOS_PROYECTO', 'KIO_T01_EMPLEADOS', 'KIO_T07_E_CAT_PROYECTOS', 'KIO_T01_E_EMPLEADOS', 'T01_T_NOMBRE');
@@ -208,8 +211,9 @@ class Catalogos extends CI_Controller {
 	}
 
 	function agregarIdFechaProyecto($post_array) {
+		$user = $this->ion_auth->user()->row();
 		$post_array['T07_FH_REGISTRO'] = date('y-m-d H:s:m');
-		$post_array['KIO_T03_E_USUARIOS'] = 1;
+		$post_array['KIO_T03_E_USUARIOS'] = $user->id;
 	 
 		return $post_array;
 	}
