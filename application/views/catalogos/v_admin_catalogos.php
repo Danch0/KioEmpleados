@@ -14,7 +14,7 @@ foreach($css_files as $file): ?>
 	a:hover { text-decoration: underline; }
 </style>
 
-<h1>Administracón de <?php echo $page_title; ?></h1>
+<h1>Administración de <?php echo $page_title; ?></h1>
 	<div>
 		<?php echo $output2; ?>
 	</div>
