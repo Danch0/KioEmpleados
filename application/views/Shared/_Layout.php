@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<title><?php echo $page_title; ?></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-		<meta name="description" content="overview &amp; stats" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jumbotron Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
 		<?php
 			$rutas = array('assets/css/bootstrap.min.css');
 			
@@ -16,95 +20,82 @@
 	</head>
 
 	<body>
-		<div class="navbar navbar-default" id="navbar">
-			<script type="text/javascript">
-				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
-			</script>
+		<nav class="navbar navbar-default" role="navigation">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">Brand</a>
+	    </div>
 
-			<div class="navbar-container" id="navbar-container">
-				<div class="navbar-header pull-left">
-					<a href="#" class="navbar-brand">
-						<small>
-							<i class="icon-leaf"></i>
-							Kio Admin
-						</small>
-					</a><!-- /.brand -->
-				</div><!-- /.navbar-header -->
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav">
+	        <li class="active"><a href="#">Link</a></li>
+	        <li><a href="#">Link</a></li>
+	        <li class="dropdown">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="#">Action</a></li>
+	            <li><a href="#">Another action</a></li>
+	            <li><a href="#">Something else here</a></li>
+	            <li class="divider"></li>
+	            <li><a href="#">Separated link</a></li>
+	            <li class="divider"></li>
+	            <li><a href="#">One more separated link</a></li>
+	          </ul>
+	        </li>
+	      </ul>
+	      <form class="navbar-form navbar-left" role="search">
+	        <div class="form-group">
+	          <input type="text" class="form-control" placeholder="Search">
+	        </div>
+	        <button type="submit" class="btn btn-default">Submit</button>
+	      </form>
+	      <ul class="nav navbar-nav navbar-right">
+	        <li><a href="#">Link</a></li>
+	        <li class="dropdown">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="#">Action</a></li>
+	            <li><a href="#">Another action</a></li>
+	            <li><a href="#">Something else here</a></li>
+	            <li class="divider"></li>
+	            <li><a href="#">Separated link</a></li>
+	          </ul>
+	        </li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
 
-				<div class="navbar-header pull-right" role="navigation">
-					<ul class="nav nav-tabs">
-						<li>
-							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="<?php echo base_url(); ?>assets/avatars/user.jpg" alt="Jason's Photo" />
-								<span class="user-info">
-									<small>Welcome,</small>
-									<?php echo $user['nombre']; ?>
-								</span>
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <?php $this->load->view($page_name); ?> 
 
-								<i class="icon-caret-down"></i>
-							</a>
-						</li>
-							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-								<li>
-									<a href="#">
-										<i class="icon-cog"></i>
-										Settings
-									</a>
-								</li>
+        </div>
+      </div>
 
-								<li>
-									<a href="#">
-										<i class="icon-user"></i>
-										Profile
-									</a>
-								</li>
+      <hr>
 
-								<li class="divider"></li>
+      <footer>
+        <p>© Company 2014</p>
+      </footer>
+    </div> <!-- /container -->
 
-								<li>
-									<?php echo anchor('auth/logout', '<i class="icon-off"></i> Logout', 'title="Logout"'); ?>
-								</li>
-							</ul>
-						</li>
-					</ul><!-- /.ace-nav -->
-				</div><!-- /.navbar-header -->
-			</div><!-- /.container -->
-		</div>
 
-		<div class="main-container" id="main-container">
-			<div class="main-container-inner">
-				<a class="menu-toggler" id="menu-toggler" href="#">
-					<span class="menu-text"></span>
-				</a>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src=" <?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+  
 
-				<div class="sidebar" id="sidebar">
-					<ul class="nav nav-list">
-						<li class="active">
-							<?php echo anchor('catalogos/', '<i class="icon-dashboard"></i> Catalogos', 'title="Catalogos"'); ?>
-						</li>
-
-						<li>
-							<?php echo anchor('empleados/', '<i class="icon-text-width"></i> Empleados', 'title="Empleados"'); ?>
-						</li>
-					</ul><!-- /.nav-list -->
-				</div>
-
-				<div class="main-content">
-					<div class="page-content">
-						<div class="row">
-							<div class="col-xs-12">
-								<!-- PAGE CONTENT BEGINS -->
-								<div class="row">
-									<?php $this->load->view($page_name); ?>
-									
-								</div><!-- /row -->
-
-								<!-- PAGE CONTENT ENDS -->
-							</div><!-- /.col -->
-						</div><!-- /.row -->
-					</div><!-- /.page-content -->
-				</div><!-- /.main-content -->
-			</div><!-- /.main-container-inner -->
-		</div><!-- /.main-container -->
-	</body>
+</body>
 </html>
