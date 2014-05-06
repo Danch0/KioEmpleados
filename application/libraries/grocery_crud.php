@@ -4,7 +4,7 @@
  *
  * A Codeigniter library that creates a CRUD automatically with just few lines of code.
  *
- * Copyright (C) 2010 - 2012  John Skoumbourdis.
+ * Copyright (C) 2010 - 2013  John Skoumbourdis.
  *
  * LICENSE
  *
@@ -14,7 +14,7 @@
  * You are free to use, modify and distribute this software, but all copyright information must remain.
  *
  * @package    	grocery CRUD
- * @copyright  	Copyright (c) 2010 through 2012, John Skoumbourdis
+ * @copyright  	Copyright (c) 2010 through 2013, John Skoumbourdis
  * @license    	https://github.com/scoumbourdis/grocery-crud/blob/master/license-grocery-crud.txt
  * @version    	1.4.1
  * @author     	John Skoumbourdis <scoumbourdisj@gmail.com>
@@ -157,7 +157,7 @@ class grocery_CRUD_Field_Types
 						'display_as' => isset($this->display_as[$field_name]) ?
 												$this->display_as[$field_name] :
 												ucfirst(str_replace("_"," ",$field_name)),
-						'required'	=> in_array($field_name,$this->required_fields) ? true : false,
+						'required'	=> !empty($this->required_fields) && in_array($field_name,$this->required_fields) ? true : false,
 						'extras'	=> $extras
 					);
 
@@ -1465,7 +1465,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
  * You are free to use, modify and distribute this software, but all copyright information must remain.
  *
  * @package    	grocery CRUD
- * @copyright  	Copyright (c) 2010 through 2012, John Skoumbourdis
+ * @copyright  	Copyright (c) 2010 through 2013, John Skoumbourdis
  * @license    	https://github.com/scoumbourdis/grocery-crud/blob/master/license-grocery-crud.txt
  * @author     	John Skoumbourdis <scoumbourdisj@gmail.com>
  */
@@ -1838,7 +1838,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		$data->input_fields = $this->get_read_input_fields($data->field_values);
 		$data->unique_hash			= $this->get_method_hash();
 
-		$data->fields 		= $this->get_edit_fields();
+		$data->fields 		= $this->get_read_fields();
 		$data->hidden_fields	= $this->get_edit_hidden_fields();
 		$data->unset_back_to_list	= $this->unset_back_to_list;
 
@@ -2144,7 +2144,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		$extra_attributes = '';
 		if(!empty($field_info->db_max_length))
 			$extra_attributes .= "maxlength='{$field_info->db_max_length}'";
-		$input = "<input id='field-{$field_info->name}' name='{$field_info->name}' type='text' value='$value' class='numeric' $extra_attributes />";
+		$input = "<input id='field-{$field_info->name}' name='{$field_info->name}' type='text' value='$value' class='numeric form-control' $extra_attributes />";
 		return $input;
 	}
 
@@ -2178,7 +2178,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		$extra_attributes = '';
 		if(!empty($field_info->db_max_length))
 			$extra_attributes .= "maxlength='{$field_info->db_max_length}'";
-		$input = "<input id='field-{$field_info->name}' name='{$field_info->name}' type='text' value=\"$value\" $extra_attributes />";
+		$input = "<input id='field-{$field_info->name}' class='form-control' name='{$field_info->name}' type='text' value=\"$value\" $extra_attributes />";
 		return $input;
 	}
 
@@ -2257,7 +2257,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		{
 			$datetime = '';
 		}
-		$input = "<input id='field-{$field_info->name}' name='{$field_info->name}' type='text' value='$datetime' maxlength='19' class='datetime-input' />
+		$input = "<input id='field-{$field_info->name}' name='{$field_info->name}' type='text' value='$datetime' maxlength='19' class='datetime-input form-control' />
 		<a class='datetime-input-clear' tabindex='-1'>".$this->l('form_button_clear')."</a>
 		({$this->ui_date_format}) hh:mm:ss";
 		return $input;
@@ -2278,7 +2278,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		$extra_attributes = '';
 		if(!empty($field_info->db_max_length))
 			$extra_attributes .= "maxlength='{$field_info->db_max_length}'";
-		$input = "<input id='field-{$field_info->name}' name='{$field_info->name}' type='password' value='$value' $extra_attributes />";
+		$input = "<input id='field-{$field_info->name}' class='form-control' name='{$field_info->name}' type='password' value='$value' $extra_attributes />";
 		return $input;
 	}
 
@@ -2312,7 +2312,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 			$date = '';
 		}
 
-		$input = "<input id='field-{$field_info->name}' name='{$field_info->name}' type='text' value='$date' maxlength='10' class='datepicker-input' />
+		$input = "<input id='field-{$field_info->name}' name='{$field_info->name}' type='text' value='$date' maxlength='10' class='datepicker-input form-control' />
 		<a class='datepicker-input-clear' tabindex='-1'>".$this->l('form_button_clear')."</a> (".$this->ui_date_format.")";
 		return $input;
 	}
@@ -2736,11 +2736,13 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
 	protected function get_read_input_fields($field_values = null)
 	{
-		$fields = $this->get_edit_fields();
+		$read_fields = $this->get_read_fields();
+
 		$this->field_types = null;
 		$this->required_fields = null;
 
-		foreach ($fields as $field) {
+		$read_inputs = array();
+		foreach ($read_fields as $field) {
 			if (!empty($this->change_field_type)
 					&& isset($this->change_field_type[$field->field_name])
 					&& $this->change_field_type[$field->field_name]->type == 'hidden') {
@@ -2749,7 +2751,45 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 			$this->field_type($field->field_name, 'readonly');
 		}
 
-		return $this->get_edit_input_fields($field_values);
+		$fields = $this->get_read_fields();
+		$types 	= $this->get_field_types();
+
+		$input_fields = array();
+
+		foreach($fields as $field_num => $field)
+		{
+			$field_info = $types[$field->field_name];
+
+			$field_value = !empty($field_values) && isset($field_values->{$field->field_name}) ? $field_values->{$field->field_name} : null;
+			if(!isset($this->callback_read_field[$field->field_name]))
+			{
+				$field_input = $this->get_field_input($field_info, $field_value);
+			}
+			else
+			{
+				$primary_key = $this->getStateInfo()->primary_key;
+				$field_input = $field_info;
+				$field_input->input = call_user_func($this->callback_read_field[$field->field_name], $field_value, $primary_key, $field_info, $field_values);
+			}
+
+			switch ($field_info->crud_type) {
+			    case 'invisible':
+			    	unset($this->read_fields[$field_num]);
+			    	unset($fields[$field_num]);
+			    	continue;
+			    	break;
+			    case 'hidden':
+			    	$this->read_hidden_fields[] = $field_input;
+			    	unset($this->read_fields[$field_num]);
+			    	unset($fields[$field_num]);
+			    	continue;
+			    	break;
+			}
+
+			$input_fields[$field->field_name] = $field_input;
+		}
+
+		return $input_fields;
 	}
 
 	protected function setThemeBasics()
@@ -2872,7 +2912,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
  * You are free to use, modify and distribute this software, but all copyright information must remain.
  *
  * @package    	grocery CRUD
- * @copyright  	Copyright (c) 2010 through 2012, John Skoumbourdis
+ * @copyright  	Copyright (c) 2010 through 2013, John Skoumbourdis
  * @license    	https://github.com/scoumbourdis/grocery-crud/blob/master/license-grocery-crud.txt
  * @author     	John Skoumbourdis <scoumbourdisj@gmail.com>
  */
@@ -3286,7 +3326,7 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
  * You are free to use, modify and distribute this software, but all copyright information must remain.
  *
  * @package    	grocery CRUD
- * @copyright  	Copyright (c) 2010 through 2012, John Skoumbourdis
+ * @copyright  	Copyright (c) 2010 through 2013, John Skoumbourdis
  * @license    	https://github.com/scoumbourdis/grocery-crud/blob/master/license-grocery-crud.txt
  * @version    	1.4.1
  * @author     	John Skoumbourdis <scoumbourdisj@gmail.com>
@@ -3325,6 +3365,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 	private $columns_checked		= false;
 	private $add_fields_checked		= false;
 	private $edit_fields_checked	= false;
+	private $read_fields_checked	= false;
 
 	protected $default_theme		= 'flexigrid';
 	protected $language				= null;
@@ -3337,6 +3378,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 
 	protected $add_fields			= null;
 	protected $edit_fields			= null;
+	protected $read_fields			= null;
 	protected $add_hidden_fields 	= array();
 	protected $edit_hidden_fields 	= array();
 	protected $field_types 			= null;
@@ -3381,6 +3423,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 	protected $unset_columns		= null;
 	protected $unset_add_fields 	= null;
 	protected $unset_edit_fields	= null;
+	protected $unset_read_fields	= null;
 
 	/* Callbacks */
 	protected $callback_before_insert 	= null;
@@ -3621,6 +3664,16 @@ class Grocery_CRUD extends grocery_CRUD_States
 
 		return $this;
 	}
+	
+	/**
+	 * Just an alias to unset_read
+	 * 
+	 * @return	void
+	 * */
+	public function unset_view()
+	{
+		return unset_read();
+	}
 
 	/**
 	 * Unsets the export button and functionality from the list
@@ -3701,6 +3754,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 
 		$this->unset_add_fields = $args;
 		$this->unset_edit_fields = $args;
+		$this->unset_read_fields = $args;
 
 		return $this;
 	}
@@ -3729,6 +3783,20 @@ class Grocery_CRUD extends grocery_CRUD_States
 		}
 
 		$this->unset_edit_fields = $args;
+
+		return $this;
+	}
+
+	public function unset_read_fields()
+	{
+		$args = func_get_args();
+
+		if(isset($args[0]) && is_array($args[0]))
+		{
+			$args = $args[0];
+		}
+
+		$this->unset_read_fields = $args;
 
 		return $this;
 	}
@@ -3802,6 +3870,19 @@ class Grocery_CRUD extends grocery_CRUD_States
 		}
 
 		$this->edit_fields = $args;
+
+		return $this;
+	}
+
+	public function set_read_fields()
+	{
+		$args = func_get_args();
+
+		if(isset($args[0]) && is_array($args[0])) {
+			$args = $args[0];
+		}
+
+		$this->read_fields = $args;
 
 		return $this;
 	}
@@ -4103,6 +4184,49 @@ class Grocery_CRUD extends grocery_CRUD_States
 			$this->edit_fields_checked = true;
 		}
 		return $this->edit_fields;
+	}
+
+	/**
+	 *
+	 * Enter description here ...
+	 */
+	protected function get_read_fields()
+	{
+		if($this->read_fields_checked === false)
+		{
+			$field_types = $this->get_field_types();
+			if(!empty($this->read_fields))
+			{
+				foreach($this->read_fields as $field_num => $field)
+				{
+					if(isset($this->display_as[$field]))
+						$this->read_fields[$field_num] = (object)array('field_name' => $field, 'display_as' => $this->display_as[$field]);
+					else
+						$this->read_fields[$field_num] = (object)array('field_name' => $field, 'display_as' => $field_types[$field]->display_as);
+				}
+			}
+			else
+			{
+				$this->read_fields = array();
+				foreach($field_types as $field)
+				{
+					//Check if an unset_read_field is initialize for this field name
+					if($this->unset_read_fields !== null && is_array($this->unset_read_fields) && in_array($field->name,$this->unset_read_fields))
+						continue;
+
+					if(!isset($field->db_extra) || $field->db_extra != 'auto_increment')
+					{
+						if(isset($this->display_as[$field->name]))
+							$this->read_fields[] = (object)array('field_name' => $field->name, 'display_as' => $this->display_as[$field->name]);
+						else
+							$this->read_fields[] = (object)array('field_name' => $field->name, 'display_as' => $field->display_as);
+					}
+				}
+			}
+
+			$this->read_fields_checked = true;
+		}
+		return $this->read_fields;
 	}
 
 	public function order_by($order_by, $direction = 'asc')
@@ -5193,12 +5317,15 @@ class UploadHandler
     private function _transliterate_characters($file_name)
 	{
 		include($this->default_config_path.'/translit_chars.php');
-		if ( ! isset($translit_characters))
+		if ( isset($translit_characters))
 		{
-			return preg_replace("/([^a-zA-Z0-9\.\-\_]+?){1}/i", '-', $file_name);
+			$file_name = preg_replace(array_keys($translit_characters), array_values($translit_characters), $file_name);
 		}
-		$transformed_file_name = preg_replace(array_keys($translit_characters), array_values($translit_characters), $file_name);
-		return str_replace(" ", "-", $transformed_file_name);
+
+		$file_name = preg_replace("/([^a-zA-Z0-9\.\-\_]+?){1}/i", '-', $file_name);
+		$file_name = str_replace(" ", "-", $file_name);
+
+		return preg_replace('/\-+/', '-', trim($file_name, '-'));
 	}
 
     private function orient_image($file_path) {
