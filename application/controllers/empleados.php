@@ -289,6 +289,219 @@ class Empleados extends CI_Controller {
 	 
 		return $post_array;
 	}
+
+	public function comentarios(){
+		try{
+
+			/* Creamos el objeto */
+			$crud = new grocery_CRUD();
+		
+			/* Seleccionamos el tema */
+			$crud->set_theme('flexigrid');
+		
+			/* Seleccionmos el nombre de la tabla de nuestra base de datos*/
+			$crud->set_table('KIO_T16_COMENTARIOS_EMPLEADO');
+		
+			/* Le asignamos un nombre */
+			$crud->set_subject('Comentarios');
+		
+			/* Asignamos el idioma español */
+			$crud->set_language('spanish');
+			
+			/* Aqui le indicamos que campos deseamos mostrar CUANDO DAMOS DE ALTA, EDITAMOS*/
+			$crud->fields('KIO_T01_E_EMPLEADOS', 'KIO_T03_E_USUARIOS', 'T16_T_COMENTARIO', 'T16_FH_REGISTRO');
+
+			/*Creamos la relacion del campo usuario que hizo el registro */
+			$crud->set_relation('KIO_T01_E_EMPLEADOS','KIO_T01_EMPLEADOS','T01_T_NOMBRE');
+
+			/* hacemos invisibles  las filas de usuario registro, por que se toma el id del usuario y hora-fecha al guardar */
+			$crud->change_field_type('KIO_T03_E_USUARIOS', 'invisible');
+			$crud->change_field_type('T16_FH_REGISTRO', 'invisible');
+		
+			/* Aqui le decimos a grocery que estos campos son obligatorios */
+			$crud->required_fields('KIO_T01_E_EMPLEADOS', 'T16_T_COMENTARIO');
+		
+			/* Aqui le indicamos que campos deseamos mostrar */
+			$crud->columns('KIO_T01_E_EMPLEADOS', 'KIO_T03_E_USUARIOS', 'T16_FH_REGISTRO', 'T16_T_COMENTARIO');
+			
+			/* Cambiamos el nombre de la field o column al que queremos mostrar*/
+			$crud->display_as('KIO_T01_E_EMPLEADOS','Empleado')->display_as('KIO_T03_E_USUARIOS','Usuario Registró');
+			$crud->display_as('T16_FH_REGISTRO','Registro')->display_as('T16_T_COMENTARIO','Comentario');
+
+			/* Mandamos el id de quien agrego el proyecto y l fecha en lo que lo hiso, con una funcion del mismo Controller */
+			$crud->callback_before_insert(array($this,'_agregar_IdUsuario_Fecha_t16'));
+					
+			/* Generamos la tabla */
+			$output = $crud->render();
+			$data['output'] = $output;
+			$data['page_title'] = 'Comentarios';
+			$data['page_name'] = 'empleados/v_admin_empleados';
+
+			$user = $this->ion_auth->user()->row();
+			$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+
+			/* La cargamos en la vista situada en
+			/applications/views/productos/administracion.php */
+			$this->load->view('shared/_layout', $data);
+		
+		}catch(Exception $e){
+		  /* Si algo sale mal cachamos el error y lo mostramos */
+		  show_error($e->getMessage().' --- '.$e->getTraceAsString());
+		}
+
+	}
+
+	function _agregar_IdUsuario_Fecha_t16($post_array) {
+		$user = $this->ion_auth->user()->row();
+		$post_array['T16_FH_REGISTRO'] = date('y-m-d H:s:m');
+		$post_array['KIO_T03_E_USUARIOS'] = $user->id;
+	 
+		return $post_array;
+	}
+
+	public function horas_extra(){
+		try{
+
+			/* Creamos el objeto */
+			$crud = new grocery_CRUD();
+		
+			/* Seleccionamos el tema */
+			$crud->set_theme('flexigrid');
+		
+			/* Seleccionmos el nombre de la tabla de nuestra base de datos*/
+			$crud->set_table('KIO_T15_HORAS_EXTRA');
+		
+			/* Le asignamos un nombre */
+			$crud->set_subject('Horas Extra');
+		
+			/* Asignamos el idioma español */
+			$crud->set_language('spanish');
+			
+			/* Aqui le indicamos que campos deseamos mostrar CUANDO DAMOS DE ALTA, EDITAMOS*/
+			$crud->fields('KIO_T01_E_EMPLEADOS', 'KIO_T03_E_USUARIOS', 'KIO_T07_E_CAT_PROYECTOS', 'T15_HR_HORAS', 'T15_FH_REGISTRO');
+
+			/*Creamos la relacion del campo usuario*/
+			$crud->set_relation('KIO_T01_E_EMPLEADOS','KIO_T01_EMPLEADOS','T01_T_NOMBRE');
+
+			/*Creamos la relacion del campo proyecto*/
+			$crud->set_relation('KIO_T07_E_CAT_PROYECTOS','KIO_T07_CAT_PROYECTOS','T07_T_NOMBRE');
+
+			/* hacemos invisibles  las filas de usuario registro, por que se toma el id del usuario y hora-fecha al guardar */
+			$crud->change_field_type('KIO_T03_E_USUARIOS', 'invisible');
+			$crud->change_field_type('T15_FH_REGISTRO', 'invisible');
+		
+			/* Aqui le decimos a grocery que estos campos son obligatorios */
+			$crud->required_fields('KIO_T01_E_EMPLEADOS', 'KIO_T07_E_CAT_PROYECTOS', 'T15_HR_HORAS');
+		
+			/* Aqui le indicamos que campos deseamos mostrar */
+			$crud->columns('KIO_T01_E_EMPLEADOS', 'KIO_T03_E_USUARIOS', 'T15_FH_REGISTRO', 'KIO_T07_E_CAT_PROYECTOS', 'T15_HR_HORAS', 'T07_FL_SUELDO_EXTRA', 'T15_FL_SUELDO_EXTRA_TOTAL');
+			
+			/* Cambiamos el nombre de la field o column al que queremos mostrar*/
+			$crud->display_as('KIO_T01_E_EMPLEADOS','Empleado')->display_as('KIO_T03_E_USUARIOS','Usuario Registró');
+			$crud->display_as('T15_FH_REGISTRO','Registro')->display_as('KIO_T07_E_CAT_PROYECTOS','Proyecto');
+			$crud->display_as('T15_HR_HORAS','Horas extra')->display_as('T07_FL_SUELDO_EXTRA','Sueldo hora extra');
+			$crud->display_as('T15_FL_SUELDO_EXTRA_TOTAL','Total');
+
+			/* Mandamos el id de quien agrego el proyecto y l fecha en lo que lo hiso, con una funcion del mismo Controller */
+			$crud->callback_before_insert(array($this,'_agregar_IdUsuario_Fecha_t15'));
+					
+			/* Generamos la tabla */
+			$output = $crud->render();
+			$data['output'] = $output;
+			$data['page_title'] = 'Horas extra';
+			$data['page_name'] = 'empleados/v_admin_empleados';
+
+			$user = $this->ion_auth->user()->row();
+			$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+
+			/* La cargamos en la vista situada en
+			/applications/views/productos/administracion.php */
+			$this->load->view('shared/_layout', $data);
+		
+		}catch(Exception $e){
+		  /* Si algo sale mal cachamos el error y lo mostramos */
+		  show_error($e->getMessage().' --- '.$e->getTraceAsString());
+		}
+
+	}
+
+	function _agregar_IdUsuario_Fecha_t15($post_array) {
+		$user = $this->ion_auth->user()->row();
+		$post_array['T15_FH_REGISTRO'] = date('y-m-d H:s:m');
+		$post_array['KIO_T03_E_USUARIOS'] = $user->id;
+	 
+		return $post_array;
+	}
+
+	public function permisos(){
+		try{
+
+			/* Creamos el objeto */
+			$crud = new grocery_CRUD();
+		
+			/* Seleccionamos el tema */
+			$crud->set_theme('flexigrid');
+		
+			/* Seleccionmos el nombre de la tabla de nuestra base de datos*/
+			$crud->set_table('KIO_T12_CTRL_PERMISOS');
+		
+			/* Le asignamos un nombre */
+			$crud->set_subject('Permisos');
+		
+			/* Asignamos el idioma español */
+			$crud->set_language('spanish');
+			
+			/* Aqui le indicamos que campos deseamos mostrar CUANDO DAMOS DE ALTA, EDITAMOS*/
+			$crud->fields('KIO_T01_E_EMPLEADOS', 'KIO_T03_E_USUARIOS', 'T12_FH_REGISTRO', 'T12_FH_SALIDA', 'T12_FH_ENTRADA', 'T12_T_MOTIVO');
+
+			/*Creamos la relacion del campo usuario*/
+			$crud->set_relation('KIO_T01_E_EMPLEADOS','KIO_T01_EMPLEADOS','T01_T_NOMBRE');
+
+			/* hacemos invisibles  las filas de usuario registro, por que se toma el id del usuario y hora-fecha al guardar */
+			$crud->change_field_type('KIO_T03_E_USUARIOS', 'invisible');
+			$crud->change_field_type('T12_FH_REGISTRO', 'invisible');
+		
+			/* Aqui le decimos a grocery que estos campos son obligatorios */
+			$crud->required_fields('KIO_T01_E_EMPLEADOS', 'T12_FH_SALIDA', 'T12_T_MOTIVO');
+		
+			/* Aqui le indicamos que campos deseamos mostrar */
+			$crud->columns('KIO_T01_E_EMPLEADOS', 'KIO_T03_E_USUARIOS', 'T12_FH_REGISTRO', 'T12_FH_SALIDA', 'T12_FH_ENTRADA', 'T12_T_MOTIVO');
+			
+			/* Cambiamos el nombre de la field o column al que queremos mostrar*/
+			$crud->display_as('KIO_T01_E_EMPLEADOS','Empleado')->display_as('KIO_T03_E_USUARIOS','Usuario Registró');
+			$crud->display_as('T12_FH_REGISTRO','Registro')->display_as('T12_FH_SALIDA','Hora salida');
+			$crud->display_as('T12_FH_ENTRADA','Hora entrada')->display_as('T12_T_MOTIVO','Motivo');
+
+			/* Mandamos el id de quien agrego el proyecto y l fecha en lo que lo hiso, con una funcion del mismo Controller */
+			$crud->callback_before_insert(array($this,'_agregar_IdUsuario_Fecha_t12'));
+					
+			/* Generamos la tabla */
+			$output = $crud->render();
+			$data['output'] = $output;
+			$data['page_title'] = 'Permisos';
+			$data['page_name'] = 'empleados/v_admin_empleados';
+
+			$user = $this->ion_auth->user()->row();
+			$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+
+			/* La cargamos en la vista situada en
+			/applications/views/productos/administracion.php */
+			$this->load->view('shared/_layout', $data);
+		
+		}catch(Exception $e){
+		  /* Si algo sale mal cachamos el error y lo mostramos */
+		  show_error($e->getMessage().' --- '.$e->getTraceAsString());
+		}
+
+	}
+
+	function _agregar_IdUsuario_Fecha_t12($post_array) {
+		$user = $this->ion_auth->user()->row();
+		$post_array['T12_FH_REGISTRO'] = date('y-m-d H:s:m');
+		$post_array['KIO_T03_E_USUARIOS'] = $user->id;
+	 
+		return $post_array;
+	}
 }
 	/* End of file empleados.php */
 	/* Location: ./application/controllers/empleados.php */
