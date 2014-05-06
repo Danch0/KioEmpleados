@@ -135,8 +135,8 @@ class Empleados extends CI_Controller {
 			/*Creamos la relacion del campo usuario que hizo el registro */
 			$crud->set_relation('KIO_T01_E_EMPLEADOS','KIO_T01_EMPLEADOS','T01_T_NOMBRE');
 
-			/*Creamos la relacion del campo usuario que hizo el registro */
-			$crud->set_relation('KIO_T03_E_USUARIOS','KIO_T03_USUARIOS','first_name');
+			/*Creamos la relacion del campo usuario que hizo el registro
+			$crud->set_relation('KIO_T03_E_USUARIOS','KIO_T03_USUARIOS','first_name'); */
 					
 			/* Aqui le indicamos que campos deseamos mostrar CUANDO DAMOS DE ALTA A UN NUEVO EMPLEADO*/
 			$crud->fields(
@@ -174,13 +174,13 @@ class Empleados extends CI_Controller {
 			$crud->display_as('T09_FH_REGISTRO','Registro');
 			
 			/* Mandamos el id de quien agrego el proyecto y l fecha en lo que lo hiso, con una funcion del mismo Controller */
-			$crud->callback_before_insert(array($this,'_agregar_IdUsuario_Fecha'));
+			$crud->callback_before_insert(array($this,'_agregar_IdUsuario_Fecha_t09'));
 
 			/* Generamos la tabla */
 			$output = $crud->render();
 			
 			$data['output'] = $output;
-			$data['page_title'] = 'Empleados';
+			$data['page_title'] = 'Compensaciones';
 			$data['page_name'] = 'empleados/v_admin_empleados';
 			
 			$user = $this->ion_auth->user()->row();
@@ -212,9 +212,79 @@ class Empleados extends CI_Controller {
 		}
 	}
 
-	function _agregar_IdUsuario_Fecha($post_array) {
+	function _agregar_IdUsuario_Fecha_t09($post_array) {
 		$user = $this->ion_auth->user()->row();
 		$post_array['T09_FH_REGISTRO'] = date('y-m-d H:s:m');
+		$post_array['KIO_T03_E_USUARIOS'] = $user->id;
+	 
+		return $post_array;
+	}
+
+	public function deducciones(){
+		try{
+
+			/* Creamos el objeto */
+			$crud = new grocery_CRUD();
+		
+			/* Seleccionamos el tema */
+			$crud->set_theme('flexigrid');
+		
+			/* Seleccionmos el nombre de la tabla de nuestra base de datos*/
+			$crud->set_table('KIO_T10_CTRL_DEDUCCIONES');
+		
+			/* Le asignamos un nombre */
+			$crud->set_subject('Deducciones');
+		
+			/* Asignamos el idioma español */
+			$crud->set_language('spanish');
+			
+			/* Aqui le indicamos que campos deseamos mostrar CUANDO DAMOS DE ALTA, EDITAMOS*/
+			$crud->fields('KIO_T01_E_EMPLEADOS', 'KIO_T03_E_USUARIOS', 'T10_T_CONCEPTO', 'T10_FL_MONTO', 'T10_FH_REGISTRO');
+
+			/*Creamos la relacion del campo usuario que hizo el registro */
+			$crud->set_relation('KIO_T01_E_EMPLEADOS','KIO_T01_EMPLEADOS','T01_T_NOMBRE');
+
+			/* hacemos invisibles  las filas de usuario registro, por que se toma el id del usuario y hora-fecha al guardar */
+			$crud->change_field_type('KIO_T03_E_USUARIOS', 'invisible');
+			$crud->change_field_type('T10_FH_REGISTRO', 'invisible');
+		
+			/* Aqui le decimos a grocery que estos campos son obligatorios */
+			$crud->required_fields('KIO_T01_E_EMPLEADOS', 'T10_T_CONCEPTO', 'T10_FL_MONTO');
+		
+			/* Aqui le indicamos que campos deseamos mostrar */
+			$crud->columns('KIO_T01_E_EMPLEADOS', 'KIO_T03_E_USUARIOS', 'T10_T_CONCEPTO', 'T10_FL_MONTO', 'T10_FH_REGISTRO');
+			
+			/* Cambiamos el nombre de la field o column al que queremos mostrar*/
+			$crud->display_as('KIO_T01_E_EMPLEADOS','Empleado')->display_as('KIO_T03_E_USUARIOS','Usuario Registró');
+			$crud->display_as('T10_T_CONCEPTO','Concepto')->display_as('T10_FL_MONTO','Monto');
+			$crud->display_as('T10_FH_REGISTRO','Registro');
+
+			/* Mandamos el id de quien agrego el proyecto y l fecha en lo que lo hiso, con una funcion del mismo Controller */
+			$crud->callback_before_insert(array($this,'_agregar_IdUsuario_Fecha_t10'));
+					
+			/* Generamos la tabla */
+			$output = $crud->render();
+			$data['output'] = $output;
+			$data['page_title'] = 'Deducciones';
+			$data['page_name'] = 'empleados/v_admin_empleados';
+
+			$user = $this->ion_auth->user()->row();
+			$data['user'] = array('nombre' => $user->first_name, 'email' => $user->email, 'KIO_T03_E_USUARIOS' => $user->id );
+
+			/* La cargamos en la vista situada en
+			/applications/views/productos/administracion.php */
+			$this->load->view('shared/_layout', $data);
+		
+		}catch(Exception $e){
+		  /* Si algo sale mal cachamos el error y lo mostramos */
+		  show_error($e->getMessage().' --- '.$e->getTraceAsString());
+		}
+
+	}
+
+	function _agregar_IdUsuario_Fecha_t10($post_array) {
+		$user = $this->ion_auth->user()->row();
+		$post_array['T10_FH_REGISTRO'] = date('y-m-d H:s:m');
 		$post_array['KIO_T03_E_USUARIOS'] = $user->id;
 	 
 		return $post_array;
