@@ -40,6 +40,7 @@
 		        <li><?php echo anchor('catalogos/proyectos', '<i class="icon-text-width"></i> Proyectos', 'title="Proyectos"'); ?></li>
 		        <li><?php echo anchor('reportes/', '<i class="icon-text-width"></i> Reportes', 'title="Reportes"'); ?></li>
 		        <li><?php echo anchor('catalogos/', '<i class="icon-dashboard"></i> Catalogos', 'title="Catalogos"'); ?></li>
+		        <li><?php echo anchor('empleados/asistencias', '<i class="icon-dashboard"></i> Asistencias', 'title="Asistencias"'); ?></li>
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
 		        <li>
@@ -74,7 +75,7 @@
       <hr>
 
       <footer>
-        <p>© Company 2014</p>
+        <p>© Kiotech 2014</p>
       </footer>
     </div> <!-- /container -->
 
@@ -82,7 +83,16 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <!--  <script src="<?php echo base_url(); ?>assets/grocery_crud/js/jquery-1.10.2.min.js"></script> -->
+    <?php
+    	$string1 = 'document.write("'."<script src='";
+    	$string2 = 'assets/grocery_crud/js/jquery-1.10.2.min.js';
+    	$string3 = "'>".'"+"<"+"/script>");';
+    ?>
+    <script type="text/javascript">
+    	window.jQuery || <?php echo $string1.base_url().$string2.$string3; ?>
+    </script>
+
+    <!-- <script src="<?php echo base_url(); ?>assets/grocery_crud/js/jquery-1.10.2.min.js"></script> -->
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script> 
 	</body>
 </html>
