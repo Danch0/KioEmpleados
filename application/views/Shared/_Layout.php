@@ -30,7 +30,7 @@
 		        <span class="icon-bar"></span>
 		        <span class="icon-bar"></span>
 		      </button>
-		      <a class="navbar-brand" href="#">KIO Sistema</a>
+		      <a class="navbar-brand" href="#">Sistema de empleados</a>
 		    </div>
 
 		    <!-- Collect the nav links, forms, and other content for toggling -->
@@ -43,12 +43,11 @@
 		        <li><?php echo anchor('empleados/asistencias', '<i class="icon-dashboard"></i> Asistencias', 'title="Asistencias"'); ?></li>
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
-		        <li>
-		        	<img class="nav-user-photo" src="<?php echo base_url(); ?>assets/avatars/user.jpg" alt="Jason's Photo" />
+		        <!-- <li>
 							<span class="user-info">
 								<small>Bienvenido,</small>
 							</span>
-						</li>
+						</li> -->
 		        <li class="dropdown">
 		          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $user['email']; ?><b class="caret"></b></a>
 		          <ul class="dropdown-menu">

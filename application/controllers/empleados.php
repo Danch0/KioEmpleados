@@ -314,6 +314,9 @@ class Empleados extends CI_Controller {
 			/*Creamos la relacion del campo usuario que hizo el registro */
 			$crud->set_relation('KIO_T01_E_EMPLEADOS','KIO_T01_EMPLEADOS','T01_T_NOMBRE');
 
+			/*Creamos la relacion del campo usuario que hizo el registro */
+			$crud->set_relation('KIO_T03_E_USUARIOS','KIO_T03_USUARIOS','username');
+
 			/* hacemos invisibles  las filas de usuario registro, por que se toma el id del usuario y hora-fecha al guardar */
 			$crud->change_field_type('KIO_T03_E_USUARIOS', 'invisible');
 			$crud->change_field_type('T16_FH_REGISTRO', 'invisible');
@@ -396,6 +399,10 @@ class Empleados extends CI_Controller {
 			/* Aqui le indicamos que campos deseamos mostrar */
 			$crud->columns('KIO_T01_E_EMPLEADOS', 'KIO_T03_E_USUARIOS', 'T15_FH_REGISTRO', 'KIO_T07_E_CAT_PROYECTOS', 'T15_HR_HORAS', 'T07_FL_SUELDO_EXTRA', 'T15_FL_SUELDO_EXTRA_TOTAL');
 			
+			$crud->callback_column('T07_FL_SUELDO_EXTRA',array($this,'_callback_sueldo_extra'));
+
+			$crud->callback_column('T15_FL_SUELDO_EXTRA_TOTAL',array($this,'_callback_sueldo_total'));
+
 			/* Cambiamos el nombre de la field o column al que queremos mostrar*/
 			$crud->display_as('KIO_T01_E_EMPLEADOS','Empleado')->display_as('KIO_T03_E_USUARIOS','Usuario Registró');
 			$crud->display_as('T15_FH_REGISTRO','Registro')->display_as('KIO_T07_E_CAT_PROYECTOS','Proyecto');
@@ -431,6 +438,27 @@ class Empleados extends CI_Controller {
 		$post_array['KIO_T03_E_USUARIOS'] = $user->id;
 	 
 		return $post_array;
+	}
+
+	public function _callback_sueldo_extra($value, $row){
+		$proyecto = $this->m_empleados->get_tabla_t07();
+		if($proyecto != FALSE){
+			foreach ($proyecto as $f) {
+				if($f->T07_E_ID == $row->KIO_T07_E_CAT_PROYECTOS){
+					return $f->T07_FL_SUELDO_EXTRA;
+				}
+				else{
+					require 'Sin sueldo extra';
+				}
+			}
+		}
+		else {
+			return 'Sin sueldo extra';
+		}
+	}
+
+	public function _callback_sueldo_total($value, $row){
+		return $row->T07_FL_SUELDO_EXTRA * $row->T15_HR_HORAS;
 	}
 
 	public function permisos(){
