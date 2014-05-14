@@ -30,4 +30,17 @@ class M_empleados extends CI_Model
 		}
 		return FALSE;
 	}
+
+	function get_tabla_t07()
+	{
+		if($query = $this->db->get('KIO_T07_CAT_PROYECTOS')){
+			if($query->num_rows() > 0){
+					return $query->result();
+			}
+		} else {
+			return FALSE;
+		}
+		return FALSE;
+
+	}
 }
