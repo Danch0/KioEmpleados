@@ -23,7 +23,7 @@ class Empleados extends CI_Controller {
 	function index()
 	{
 		/* */
-		$data['page_title'] = 'Empleados';
+		$data['page_title'] = 'Emplea2';
 		$data['page_name'] = 'empleados/index';
 
 		$user = $this->ion_auth->user()->row();
